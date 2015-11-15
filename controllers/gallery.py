@@ -1,0 +1,60 @@
+# -*- coding: utf-8 -*-
+# * View Gallaries
+# * Create Gallery
+# * View contents of a gallary
+# * Like Gallery
+# * Like Photo(s)
+
+
+def index():
+	"""	Returns the list of all the Galleries for the logged-in user.
+	"""
+	rows = db().select( orderby=db.tbl_gallery.gallery_name )
+	loggedin_user = db( db.auth_user.id== auth.user.id ).select() [0];
+
+	return locals();
+
+def new_gallery():
+	gallery_form = FORM(
+		INPUT(_name='gallery_name',_type='text', _placeholder="Gallery Name"),
+		INPUT(_name='description',_type='text', _placeholder="Gallery is about..."),
+		# INPUT(_name='image_title',_type='text', _placeholder="Image Title"),
+		# INPUT(_name='image_file',_type='file', _placeholder="Image File"),
+		INPUT(_type="submit", _value="Done")
+	)
+	
+	if gallery_form.accepts(request.vars,formname='gallery_form'):
+		
+		id = db.tbl_gallery.insert( gallery_name=gallery_form.vars.gallery_name,
+									description=gallery_form.vars.description );
+		session.flash="done "+str(id);
+		redirect( URL("gallery", "index") );
+
+	return locals();
+
+
+def edit_gallery():
+
+	loggedin_user = db( db.auth_user.id== auth.user.id ).select() [0];
+	gallery_id = request.args(0);
+	gallery_name = db.tbl_gallery[gallery_id].gallery_name;
+
+	db.tbl_pictures.gallery_name.default = gallery_id;
+	db.tbl_pictures.gallery_name.writable = False;
+
+	img_form = SQLFORM(db.tbl_pictures).process();
+
+	if img_form.accepts(request.vars, formname="img_form"):
+		session.flash = "Added to "+gallery_name+" successfully."
+		redirect( URL("gallery", "index") );
+
+
+	return locals();
+
+def view_gallery():
+	gallery_id = request.args(0);
+	gallery_name = db.tbl_gallery[gallery_id].gallery_name;
+	loggedin_user = db( db.auth_user.id== auth.user.id ).select() [0];
+
+	pics =  db(tbl_pictures.created_by==loggedin_user).select() ;
+	return locals;
