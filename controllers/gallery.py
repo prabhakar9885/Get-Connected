@@ -5,15 +5,17 @@
 # * Like Gallery
 # * Like Photo(s)
 
-
+@auth.requires_login()
 def index():
 	"""	Returns the list of all the Galleries for the logged-in user.
 	"""
-	rows = db().select( orderby=db.tbl_gallery.gallery_name )
 	loggedin_user = db( db.auth_user.id== auth.user.id ).select() [0];
+	rows = db( db.tbl_gallery.created_by==loggedin_user ).select( orderby=db.tbl_gallery.gallery_name )
 
 	return locals();
 
+
+@auth.requires_login()
 def new_gallery():
 	gallery_form = FORM(
 		INPUT(_name='gallery_name',_type='text', _placeholder="Gallery Name"),
@@ -33,6 +35,7 @@ def new_gallery():
 	return locals();
 
 
+@auth.requires_login()
 def edit_gallery():
 
 	loggedin_user = db( db.auth_user.id== auth.user.id ).select() [0];
@@ -47,14 +50,21 @@ def edit_gallery():
 	if img_form.accepts(request.vars, formname="img_form"):
 		session.flash = "Added to "+gallery_name+" successfully."
 		redirect( URL("gallery", "index") );
-
-
+		
 	return locals();
 
+
+@auth.requires_login()
 def view_gallery():
 	gallery_id = request.args(0);
 	gallery_name = db.tbl_gallery[gallery_id].gallery_name;
 	loggedin_user = db( db.auth_user.id== auth.user.id ).select() [0];
 
-	pics =  db(tbl_pictures.created_by==loggedin_user).select() ;
-	return locals;
+	pics = db(db.tbl_pictures.created_by==loggedin_user and 
+				db.tbl_pictures.gallery_name==gallery_id ).select();
+	return locals();
+
+
+@auth.requires_login()
+def download():
+    return response.download(request, db);
