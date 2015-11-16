@@ -6,3 +6,16 @@
 [2015-11-15 14:22:39] EDIT getconnected/controllers/default.py: 2
 [2015-11-15 14:23:04] EDIT getconnected/models/menu.py: 0
 [2015-11-15 14:23:33] EDIT getconnected/models/menu.py: 0
+[2015-11-16 10:18:51] EDIT getconnected/models/gallery.py: 0
+[2015-11-16 10:20:15] EDIT getconnected/models/gallery.py: 0
+[2015-11-16 10:22:18] EDIT getconnected/models/gallery.py: 3
+[2015-11-16 10:22:23] EDIT getconnected/models/gallery.py: 0
+[2015-11-16 10:22:31] EDIT getconnected/models/gallery.py: 0
+[2015-11-16 10:22:59] EDIT getconnected/models/gallery.py: 0
+[2015-11-16 10:27:26] EDIT getconnected/views/gallery/view_gallery.html: 0
+[2015-11-16 10:29:26] EDIT getconnected/views/gallery/view_gallery.html: 2
+[2015-11-16 10:29:40] EDIT getconnected/views/gallery/view_gallery.html: -11
+[2015-11-16 10:29:45] EDIT getconnected/views/gallery/view_gallery.html: 11
+[2015-11-16 14:04:55] EDIT getconnected/views/gallery/view_gallery.html: 17
+[2015-11-16 14:05:45] EDIT getconnected/views/gallery/view_gallery.html: 0
+[2015-11-16 14:31:57] EDIT getconnected/views/gallery/view_gallery.html: -17
