@@ -98,7 +98,6 @@ auth.settings.extra_fields['auth_user']= [
 												),
 											Field('pic_blob', 'blob'),
 											Field('profile_picture', 'upload', uploadfield='pic_blob')
-											# Field('profile_pic_id', 'integer')
 										];
 
 

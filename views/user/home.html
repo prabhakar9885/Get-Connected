@@ -1,0 +1,37 @@
+{{ extend "layout.html"}}
+
+<div class="col-md-4 col-sm-6">
+	<div class="well"> 
+        <form  action="{{ =URL('post_status') }}" method="post" 
+        		class="form-horizontal" role="form">
+            <h4>What's New</h4>
+            	<div class="form-group" style="padding:14px;">
+                	<textarea name="new_status" class="form-control" placeholder="Update your status"></textarea>
+              	</div>
+              	<button class="btn btn-success pull-right" type="submit">Post</button>
+              	<ul class="list-inline" ><li>
+              	Share with {{ = form.custom.widget.shared_with }}</li></ul>
+        </form>
+    </div>
+</div>
+
+<div class="col-md-4 col-sm-6">
+	{{ for post in post_cleaned:}}
+      <div class="panel panel-default">
+           <div class="panel-heading">
+              <a href="#" class="pull-right">{{=post.created_on}}</a> 
+              <h4>{{=post.created_by}}</h4>
+           </div>
+        <div class="panel-body">
+              <div class="clearfix"></div>
+              {{=post.data_content}}
+              <hr>
+              <ul class="list-unstyled">
+                <li>
+                  <a href="">{{=post.shared_with}}</a>
+                </li>
+              </ul>
+            </div>
+         </div>
+  {{ pass }}
+</div>
