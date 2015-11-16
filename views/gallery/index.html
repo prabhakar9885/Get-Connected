@@ -1,0 +1,41 @@
+{{ extend "layout.html"}}
+
+<style type="text/css">
+  a
+  {
+    text-decoration-line: unset;
+  }
+  a:hover
+  {
+    color: orange;
+    text-decoration-line: unset;
+  }
+</style>
+
+<p> 
+  <h1>Gallery</h1>
+</p>
+
+<h3>
+<a href="{{ = URL('new_gallery') }}">Create new gallery</a>
+</h3>
+<!-- 
+<b>
+	{{= loggedin_user.email }}
+</b> -->
+
+{{ if len(rows) == 0:}}
+	<i>No gallery has been created. <br/>
+		Why don't you create a galery right away.</i>
+{{else:}}
+<table class="table">
+  {{ for row in rows: }}
+  <tr>
+    <td> <a href="{{= URL( 'view_gallery', args=row.id ) }}"> {{ = row.gallery_name }} </a></td>
+    <td> {{ = row.created_on }}</td>
+    <td> {{ = row.description }}</td>
+    <td> <a href="{{= URL( 'edit_gallery', args=row.id ) }}"> Add Picture </a></td>
+  </tr>
+  {{ pass }}
+</table>
+{{pass}}

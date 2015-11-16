@@ -1,0 +1,78 @@
+{{ extend "layout.html"}}
+
+<style type="text/css">
+  a
+  {
+    text-decoration-line: unset;
+  }
+  a:hover
+  {
+    color: orange;
+    text-decoration-line: unset;
+  }
+  .hidden, #fancybox-thumbs  img {
+    display: none;
+  }
+</style>
+
+
+<script type="text/javascript" src="{{=URL('static','js/jquery.fancybox.js')}}"></script>
+<style type="text/css" link="{{=URL('static','css/jquery.fancybox.css')}}"></style>
+<script type="text/javascript" src="{{=URL('static','js/jquery.fancybox-thumbs.js')}}"></script>
+<style type="text/css" link="{{=URL('static','css/jquery.fancybox-thumbs.css')}}"></style>
+
+<script type="text/javascript">
+  
+  $( function () {
+            $('.fancybox-thumbs').fancybox({
+                prevEffect : 'none',
+                nextEffect : 'none',
+
+                closeBtn  : false,
+                arrows    : false,
+                nextClick : false,                
+
+                helpers : {
+                    // thumbs : {
+                    //     width  : 200,
+                    //     height : 200
+                    // }
+                }
+            });
+    })
+
+</script>
+
+
+<p> 
+  <h1>{{=gallery_name}}</h1>
+</p>
+
+{{if len(pics)==0:}}
+  <div>
+  <div style="float:left;">
+    <i>The gallery seems empty....</i><br>
+    Why don't you <a href="{{=URL('edit_gallery', args=gallery_id )}}">add some photo</a> to it?
+  </div>
+  <div style="float:right;">
+    <img style="width:30%; height:30%;" src="{{=URL('static','images/empty.png')}}"/>
+  </div>
+
+{{else:}}
+<div class="main_pannel">
+
+      {{ i=1 }}
+      {{ for pic in pics:}}
+        <a class="fancybox-thumbs" data-fancybox-group="thumb{{=i}}" 
+            href="{{=URL('download',args=pic.pic_upload)}}">
+              <img src="{{=URL('download',args=pic.thumbnail)}}" alt="" />
+        </a>
+
+        <a class="fancybox-thumbs hidden" data-fancybox-group="thumb{{=i}}" 
+            href="{{=URL('download',args=pic.pic_upload)}}">
+              <img src="{{=URL('download',args=pic.thumbnail)}}" alt="" />
+        </a>
+          {{ i = i+1 }}
+      {{pass}}
+</div>
+{{pass}}

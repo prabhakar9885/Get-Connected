@@ -25,13 +25,11 @@ response.google_analytics_id = None
 #########################################################################
 
 response.menu = [
-    (T('Home'), False, URL('default', 'show'), []), # Tuple
+    (T('Home'), False, URL('user', 'home'), []), # Tuple
     (T('Messages'), False, URL('default', 'show'), []), # Tuple
     (T('Connections'), False, URL('default', 'show'), []),  # Tuple
     (T('Gallery'), False, URL('gallery', 'index'), []), # Tuple
     (T('Notifications'), False, URL('default', 'show'), []),  # Tuple
-    (T('Show Users'), False, URL('default', 'show'), []), # Tuple
-    (T('Add User'), False, URL('default', 'create'), []), # Tuple
 ]
 
 DEVELOPMENT_MENU = False
