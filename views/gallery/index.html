@@ -32,6 +32,13 @@
   {{ for row in rows: }}
   <tr>
     <td> <a href="{{= URL( 'view_gallery', args=row.id ) }}"> {{ = row.gallery_name }} </a></td>
+    <td>
+        {{ if gallery_size[row.id] != 0: }}
+          {{ = gallery_size[row.id] }} pics
+        {{ else: }}
+          -
+        {{ pass }}
+    </td>
     <td> {{ = row.created_on }}</td>
     <td> {{ = row.description }}</td>
     <td> <a href="{{= URL( 'edit_gallery', args=row.id ) }}"> Add Picture </a></td>

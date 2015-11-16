@@ -11,6 +11,9 @@ def index():
 	"""
 	loggedin_user = db( db.auth_user.id== auth.user.id ).select() [0];
 	rows = db( db.tbl_gallery.created_by==loggedin_user ).select( orderby=db.tbl_gallery.gallery_name )
+	gallery_size={};
+	for row in rows:
+		gallery_size[row.id] = len(db(db.tbl_pictures.gallery_name==row.id).select())
 
 	return locals();
 
