@@ -14,6 +14,7 @@ def home():
 						(db.tbl_posts.shared_with==loggedin_User_id) ).select( orderby=~db.tbl_posts.created_on );
 	i=0;
 	post_cleaned=[]
+	comments_for_post_dict = {}
 	for post in posts:
 		post_cleaned.append(post);
 		creater = db(post_cleaned[i].created_by ==db.auth_user.id).select()[0];
@@ -23,6 +24,9 @@ def home():
 			post_cleaned[i].shared_with = "%s %s" %(shared_with.first_name, shared_with.last_name);
 		except IndexError: # The post is shared with none.
 			post_cleaned[i].shared_with = "";
+
+		comments_data = db( db.tbl_comments.post_id==post.id ).select(orderby=db.tbl_comments.created_on);
+		comments_for_post_dict[ post.id ] = comments_data;
 		i = i+1;
 	# options = form.elements('option');
 	# for i in options:
@@ -40,3 +44,11 @@ def post_status():
 	session.flash = "Posted Successfully."
 	redirect("home")
 	# return response.render('user/home.html', locals() );
+
+
+def post_comment():
+	new_comment = request.vars.new_comment
+	db.tbl_comments.insert(post_id=request.vars.post_id, data_content=request.vars.new_comment)
+	db.commit();
+	session.flash = "Posted Successfully."
+	redirect("home")

@@ -1,5 +1,80 @@
 {{ extend "layout.html"}}
 
+<style type="text/css">
+.detailBox {
+  width: 100%;
+  margin: 0%;
+}
+
+.commentBox {
+  padding: 10px;
+}
+
+.commentBox .form-group:first-child,
+.actionBox .form-group:first-child {
+  width: 80%;
+}
+
+.commentBox .form-group:nth-child(2),
+.actionBox .form-group:nth-child(2) {
+  width: 18%;
+}
+
+.actionBox .form-group * {
+  width: 100%;
+}
+
+.taskDescription {
+  margin-top: 10px 0;
+}
+
+.commentList {
+  padding: 0;
+  list-style: none;
+  max-height: 200px;
+  overflow: auto;
+}
+
+.commentList li {
+  margin: 0;
+  margin-top: 10px;
+}
+
+.commentList li > div {
+  display: table-cell;
+}
+
+.commenterImage {
+  width: 30px;
+  margin-right: 5px;
+  height: 100%;
+  float: left;
+}
+
+.commenterImage img {
+  width: 100%;
+  border-radius: 50%;
+}
+
+.commentText p {
+  margin: 0;
+}
+
+.sub-text {
+  color: #aaa;
+  font-family: verdana;
+  font-size: 11px;
+}
+
+.actionBox {
+  /* border-top: 1px dotted #bbb; */
+    padding: 2%;
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-bottom: 5%
+}
+</style>
+
 <div class="col-md-4 col-sm-6">
 	<div class="well"> 
         <form  action="{{ =URL('post_status') }}" method="post" 
@@ -15,23 +90,56 @@
     </div>
 </div>
 
-<div class="col-md-4 col-sm-6">
+<div class="col-md-5 col-sm-6">
 	{{ for post in post_cleaned:}}
       <div class="panel panel-default">
            <div class="panel-heading">
-              <a href="#" class="pull-right">{{=post.created_on}}</a> 
+              <a href="#" class="pull-right">{{=post.created_on.strftime("%d %b %Y, %I:%m %p")}}</a> 
               <h4>{{=post.created_by}}</h4>
            </div>
         <div class="panel-body">
               <div class="clearfix"></div>
               {{=post.data_content}}
               <hr>
-              <ul class="list-unstyled">
-                <li>
-                  <a href="">{{=post.shared_with}}</a>
-                </li>
-              </ul>
+              {{ if post.shared_with != "" : }}
+                <ul class="list-unstyled">
+                  <li>
+                    <span style="color: darkgrey;"> with</span> <a href="">{{=post.shared_with}}</a>
+                  </li>
+                </ul>
+                <hr/>
+                {{ pass }}
+                          
+              <div class="detailBox">
+                  <div class="actionBox">
+                      <ul class="commentList">
+                        {{ for comment in comments_for_post_dict[post.id]: }}
+                          <li>
+                              <div class="commenterImage">
+                                <img src="http://lorempixel.com/50/50/people/6" />
+                              </div>
+                              <div class="commentText">
+                                  <p class="">{{=comment.data_content}}</p> <span class="date sub-text">on {{=comment.created_on.strftime("%d %b %Y, %I:%m %p")}}</span>
+
+                              </div>
+                          </li>
+                          {{ pass }}
+                      </ul>
+                      <form action="{{ = URL('post_comment') }}" method="post"
+                            class="form-inline" role="form" >
+                          <div class="input-group">
+                            <input name="new_comment" type="textbox" placeholder="Enter your comment" 
+                                      class="form-control">
+                            <input type="hidden" name="post_id" value="{{=post.id}}">
+                            <span class="input-group-btn">
+                              <button class="btn btn-default" type="submit" >Comment</button>
+                              <button class="btn btn-default" type="button" >Like</button>
+                            </span>
+                          </div>
+                      </form>
+                  </div>
+              </div>
             </div>
-         </div>
+        </div>
   {{ pass }}
 </div>
