@@ -29,8 +29,7 @@ db.define_table( "tbl_posts",	Field('shared_with', 'reference auth_user'),
 				);
 
 db.define_table( "tbl_comments",	Field('post_id', 'reference tbl_posts'),
-									Field('comment_id', 'reference tbl_comments'),
-									Field('gallery_id', 'reference tbl_gallery'),
+									# Field('gallery_id', 'reference tbl_gallery'),
 									Field("data_content", 'text' ),
 									auth.signature
 				);
