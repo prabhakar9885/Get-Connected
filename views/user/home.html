@@ -153,8 +153,10 @@
                                 <img src="http://lorempixel.com/50/50/people/6" />
                               </div>
                               <div class="commentText">
-                                  <p class="">{{=comment.data_content}}</p> <span class="date sub-text">on {{=comment.created_on.strftime("%d %b %Y, %I:%m %p")}}</span>
-
+                                  <p class="">{{=comment[1].data_content}}</p> 
+                                  <span class="date sub-text">
+                                    on {{=comment[1].created_on.strftime("%d %b %Y, %I:%m %p")}}
+                                  </span>
                               </div>
                           </li>
                           {{ pass }}
