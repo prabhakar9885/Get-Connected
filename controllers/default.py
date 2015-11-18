@@ -16,6 +16,10 @@ def index():
     if you need a simple wiki simply replace the two lines below with:
     return auth.wiki()
     """
+
+    if auth.user:
+        redirect(URL("user","home"));
+
     response.flash = T("Time to get connected")
     message=T('Get connected with your friends')
     dev_mode = False;
