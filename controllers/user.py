@@ -53,11 +53,31 @@ def post_status():
 	# return response.render('user/home.html', locals() );
 
 
-def post_comment():
-	new_comment = request.vars.new_comment
-	db.tbl_comments.insert(post_id=request.vars.post_id, data_content=request.vars.new_comment)
-	db.commit();
-	session.flash = "Posted Successfully."
+def post_comment_like():
+
+	session.flash = "as "+str(request.vars);
+
+	if request.vars.like_btn:
+		# The user has submitted a like/unlike
+		session.flash = "Liked: " # + str(request.vars);
+
+		query = (db.tbl_likes.post_id == request.vars.post_id) & (db.tbl_likes.created_by == auth.user.id);
+
+		user_has_already_liked_the_post = True if len( db( query ).select() ) > 0 else False;
+
+		if user_has_already_liked_the_post:
+			db( query ).delete();
+			session.flash = "Removed like."
+		else:
+			db.tbl_likes.insert( post_id = request.vars.post_id )
+		db.commit();
+	else:
+		# The user has submitted a comment
+		new_comment = request.vars.new_comment
+		db.tbl_comments.insert(post_id=request.vars.post_id, data_content=request.vars.new_comment)
+		db.commit();
+		session.flash = "Commented Successfully."
+
 	redirect("home")
 
 
