@@ -12,10 +12,20 @@ def home():
 	form = SQLFORM(db.tbl_posts);
 	posts = db( (db.tbl_posts.created_by==loggedin_User_id) | 
 						(db.tbl_posts.shared_with==loggedin_User_id) ).select( orderby=~db.tbl_posts.created_on );
+	
 	i=0;
 	post_cleaned=[]
 	commenter_profile_pic = {}
 	comments_for_post_dict = {}
+	id_of_posts_liked_by_me = []
+
+	query_the_liked_posts = (db.tbl_likes.post_id != None) & \
+								 (db.tbl_likes.created_by == auth.user.id);
+
+	_id_of_posts_liked_by_me = db( query_the_liked_posts ).select( db.tbl_likes.post_id );
+	for liked_post in _id_of_posts_liked_by_me:
+		id_of_posts_liked_by_me.append( liked_post.post_id )
+
 	for post in posts:
 		post_cleaned.append(post);
 		creater = db(post_cleaned[i].created_by ==db.auth_user.id).select()[0];
@@ -35,12 +45,7 @@ def home():
 				   = db( db.auth_user.id == comment.created_by ).select()[0].profile_picture
 
 		i = i+1;
-	# options = form.elements('option');
-	# for i in options:
-	# 	if i.attributes["_value"]==str(loggedin_User_id):
-	# 		options.remove( i );
-	# form.element('option',replace=options);
-	
+
 	return locals();
 
 def post_status():
@@ -59,18 +64,18 @@ def post_comment_like():
 
 	if request.vars.like_btn:
 		# The user has submitted a like/unlike
-		session.flash = "Liked: " # + str(request.vars);
-
+		
 		query = (db.tbl_likes.post_id == request.vars.post_id) & (db.tbl_likes.created_by == auth.user.id);
-
 		user_has_already_liked_the_post = True if len( db( query ).select() ) > 0 else False;
 
 		if user_has_already_liked_the_post:
 			db( query ).delete();
+			db.commit();
 			session.flash = "Removed like."
 		else:
 			db.tbl_likes.insert( post_id = request.vars.post_id )
-		db.commit();
+			db.commit();
+			session.flash = "Liked: " # + str(request.vars);
 	else:
 		# The user has submitted a comment
 		new_comment = request.vars.new_comment

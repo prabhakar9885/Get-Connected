@@ -181,7 +181,13 @@
                                         onClick="return isCommentValid(this);" value="Commented">
                                         Comment</button>
                               <button class="btn btn-default" name="like_btn" value="liked" 
-                                        type="submit">Like</button>
+                                        type="submit">
+                                        {{ if post.id in id_of_posts_liked_by_me: }}
+                                          Liked
+                                        {{ else: }}
+                                          Like
+                                        {{ pass }}
+                              </button>
                             </span>
                           </div>
                       </form>
