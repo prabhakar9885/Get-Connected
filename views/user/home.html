@@ -163,15 +163,15 @@
                 <ul class="list-unstyled">
                   <li>
                     <span style="color: darkgrey;"> with</span> <a href="">{{=post.shared_with}}</a>
-                    {{ if post.id in count_of_likes_for_post: }}
-                      <span style="color: darkgrey; margin: 0px 8px;"> | </span>
-                      <span style="color: darkgrey;">
-                        {{ if count_of_likes_for_post[post.id] == 1: }}
-                          1 person liked it.
-                        {{ else: }}
-                          {{ =count_of_likes_for_post[post.id] }} people liked it
-                        {{ pass }}
-                      </span>
+                    {{ if post.id in count_of_likes_for_post and count_of_likes_for_post[post.id] > 0: }}
+                        <span style="color: darkgrey; margin: 0px 8px;"> | </span>
+                        <span style="color: darkgrey;">
+                          {{ if count_of_likes_for_post[post.id] == 1: }}
+                            1 person liked it.
+                          {{ else: }}
+                            {{ =count_of_likes_for_post[post.id] }} people liked it
+                          {{ pass }}
+                        </span>
                     {{ pass }}
                   </li>
                 </ul>
