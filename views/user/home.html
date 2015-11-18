@@ -180,14 +180,13 @@
                               <button class="btn btn-default" type="submit" name="comment_btn" 
                                         onClick="return isCommentValid(this);" value="Commented">
                                         Comment</button>
-                              <button class="btn btn-default" name="like_btn" value="liked" 
-                                        type="submit">
-                                        {{ if post.id in id_of_posts_liked_by_me: }}
-                                          Liked
-                                        {{ else: }}
-                                          Like
-                                        {{ pass }}
-                              </button>
+                              {{ if post.id in id_of_posts_liked_by_me: }}
+                                  <button class="btn btn-default" name="like_btn" value="liked" 
+                                          type="submit">Liked</button>
+                              {{ else: }}
+                                  <button class="btn btn-default" name="like_btn" value="liked" 
+                                          type="submit">Like</button>
+                              {{ pass }}
                             </span>
                           </div>
                       </form>
