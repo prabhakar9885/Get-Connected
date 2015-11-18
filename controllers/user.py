@@ -14,6 +14,7 @@ def home():
 						(db.tbl_posts.shared_with==loggedin_User_id) ).select( orderby=~db.tbl_posts.created_on );
 	i=0;
 	post_cleaned=[]
+	commenter_profile_pic = {}
 	comments_for_post_dict = {}
 	for post in posts:
 		post_cleaned.append(post);
@@ -27,6 +28,12 @@ def home():
 
 		comments_data = db( db.tbl_comments.post_id==post.id ).select(orderby=db.tbl_comments.created_on);
 		comments_for_post_dict[ post.id ] = comments_data;
+
+		for comment in comments_data:
+			if comment.created_by not in commenter_profile_pic:
+				commenter_profile_pic[ comment.created_by ] \
+				   = db( db.auth_user.id == comment.created_by ).select()[0].profile_picture
+
 		i = i+1;
 	# options = form.elements('option');
 	# for i in options:
@@ -52,3 +59,8 @@ def post_comment():
 	db.commit();
 	session.flash = "Posted Successfully."
 	redirect("home")
+
+
+@auth.requires_login()
+def download():
+    return response.download(request, db);
