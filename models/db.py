@@ -96,8 +96,7 @@ auth.settings.extra_fields['auth_user']= [
 																			error_message='Please select your gender.'
 																		)
 												),
-											Field('pic_blob', 'blob'),
-											Field('profile_picture', 'upload', uploadfield='pic_blob')
+											Field('profile_picture', 'upload')
 										];
 
 
