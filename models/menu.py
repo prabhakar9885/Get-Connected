@@ -6,7 +6,7 @@
 #########################################################################
 
 response.logo = A(B(SPAN('Get Connected')),XML('&trade;&nbsp;'),
-                  _class="navbar-brand",_href="{{=URL('default', 'index')}}",
+                  _class="navbar-brand",_href=URL('user', 'home'),
                   _id="web2py-logo")
 response.title = request.application.replace('_',' ').title()
 response.subtitle = ''
