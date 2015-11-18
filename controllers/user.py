@@ -17,7 +17,9 @@ def home():
 	post_cleaned=[]
 	commenter_profile_pic = {}
 	comments_for_post_dict = {}
+	count_of_likes_for_post = {}
 	id_of_posts_liked_by_me = []
+	profile_picture_of_post_owner = {}
 
 	query_the_liked_posts = (db.tbl_likes.post_id != None) & \
 								 (db.tbl_likes.created_by == auth.user.id);
@@ -36,13 +38,24 @@ def home():
 		except IndexError: # The post is shared with none.
 			post_cleaned[i].shared_with = "";
 
+		# Get all the comments for the "post"
 		comments_data = db( db.tbl_comments.post_id==post.id ).select(orderby=db.tbl_comments.created_on);
 		comments_for_post_dict[ post.id ] = comments_data;
 
+		# Get the profile pic of all the commenters for the "post"
 		for comment in comments_data:
 			if comment.created_by not in commenter_profile_pic:
 				commenter_profile_pic[ comment.created_by ] \
 				   = db( db.auth_user.id == comment.created_by ).select()[0].profile_picture
+
+		# Get count of the likes for "post"
+		count_of_likes_for_post[post.id] = db( db.tbl_likes.post_id == post.id ).count()
+
+		# Get profile pic of the "post" creater.
+		if post.modified_by not in profile_picture_of_post_owner:
+			profile_picture_of_post_owner[ post.modified_by ] = \
+						db(db.auth_user.id==post.modified_by).\
+							select( db.auth_user.profile_picture )[0].profile_picture ;
 
 		i = i+1;
 
