@@ -24,9 +24,6 @@
   width: 100%;
 }
 
-.taskDescription {
-  margin-top: 10px 0;
-}
 
 .commentList {
   padding: 0;
@@ -42,6 +39,7 @@
 
 .commentList li > div {
   display: table-cell;
+  margin-bottom: 3%;
 }
 
 .commenterImage {
@@ -73,17 +71,53 @@
     padding-right: 5%;
     padding-bottom: 5%
 }
+
+.ErrorMessage{
+  color: RED;
+  font-style: italic;
+}
+.ErrorHide{
+  display: none;
+}
 </style>
 
+<script type="text/javascript">
+  function isTheFormValid(e) {
+    if( $("#new_status").val().trim() == "" ){
+      $("#StatusError").removeClass("ErrorHide")
+      $("#new_status").focus()
+      return false;
+    }
+    $("#StatusError").addClass("ErrorHide")
+    return true;
+  }
+
+  function isCommentValid(e) {
+    comment_box = $(e).parent().prev();
+    error_msg = $(e).parent().parent().parent().next();
+
+    if( comment_box.val().trim() == "" ){
+      $(error_msg).removeClass("ErrorHide")
+      $(error_msg).focus()
+      return false;
+    }
+    $(error_msg).addClass("ErrorHide")
+    return true;
+  }
+</script>
+
 <div class="col-md-4 col-sm-6">
-	<div class="well"> 
+	<div class="well" style="position: fixed; width: 30%;"> 
         <form  action="{{ =URL('post_status') }}" method="post" 
         		class="form-horizontal" role="form">
             <h4>What's New</h4>
             	<div class="form-group" style="padding:14px;">
-                	<textarea name="new_status" class="form-control" placeholder="Update your status"></textarea>
+                	<textarea name="new_status" id="new_status"
+                      class="form-control" placeholder="Update your status"></textarea>
+                  <span id="StatusError" class="ErrorMessage ErrorHide">Status can not be empty.</span>
               	</div>
-              	<button class="btn btn-success pull-right" type="submit">Post</button>
+              	<button class="btn btn-success pull-right" 
+                      onclick="return isTheFormValid()" type="submit">Post</button>
               	<ul class="list-inline" ><li>
               	Share with {{ = form.custom.widget.shared_with }}</li></ul>
         </form>
@@ -128,15 +162,17 @@
                       <form action="{{ = URL('post_comment') }}" method="post"
                             class="form-inline" role="form" >
                           <div class="input-group">
+                            <input type="hidden" name="post_id" value="{{=post.id}}">
                             <input name="new_comment" type="textbox" placeholder="Enter your comment" 
                                       class="form-control">
-                            <input type="hidden" name="post_id" value="{{=post.id}}">
                             <span class="input-group-btn">
-                              <button class="btn btn-default" type="submit" >Comment</button>
+                              <button class="btn btn-default" type="submit" 
+                                        onClick="return isCommentValid(this);">Comment</button>
                               <button class="btn btn-default" type="button" >Like</button>
                             </span>
                           </div>
                       </form>
+                      <span id="CommentError" class="ErrorMessage ErrorHide ">Comment can not be empty.</span>
                   </div>
               </div>
             </div>
