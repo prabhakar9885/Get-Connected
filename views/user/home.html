@@ -72,6 +72,14 @@
     padding-bottom: 5%
 }
 
+
+@media (min-width: 600px) {
+    .left-pannel-fixed {
+        position: fixed;
+        width: 28%;
+    }
+}
+
 .ErrorMessage{
   color: RED;
   font-style: italic;
@@ -106,8 +114,8 @@
   }
 </script>
 
-<div class="col-md-4 col-sm-6">
-	<div class="well" style="position: fixed; width: 30%;"> 
+<div class="col-md-4 col-sm-5">
+	<div class="well left-pannel-fixed" > 
         <form  action="{{ =URL('post_status') }}" method="post" 
         		class="form-horizontal" role="form">
             <h4>What's New</h4>
@@ -124,7 +132,7 @@
     </div>
 </div>
 
-<div class="col-md-5 col-sm-6">
+<div class="col-md-5 col-sm-5">
 	{{ for post in post_cleaned:}}
       <div class="panel panel-default">
            <div class="panel-heading">
@@ -162,16 +170,18 @@
                           </li>
                           {{ pass }}
                       </ul>
-                      <form action="{{ = URL('post_comment') }}" method="post"
-                            class="form-inline" role="form" >
+                      <form action="{{ = URL('post_comment_like') }}" method="post"
+                            class="form-inline" role="form" name="comment_like_form" >
                           <div class="input-group">
                             <input type="hidden" name="post_id" value="{{=post.id}}">
                             <input name="new_comment" type="textbox" placeholder="Enter your comment" 
                                       class="form-control">
                             <span class="input-group-btn">
-                              <button class="btn btn-default" type="submit" 
-                                        onClick="return isCommentValid(this);">Comment</button>
-                              <button class="btn btn-default" type="button" >Like</button>
+                              <button class="btn btn-default" type="submit" name="comment_btn" 
+                                        onClick="return isCommentValid(this);" value="Commented">
+                                        Comment</button>
+                              <button class="btn btn-default" name="like_btn" value="liked" 
+                                        type="submit">Like</button>
                             </span>
                           </div>
                       </form>
