@@ -100,6 +100,10 @@
 .ErrorHide{
   display: none;
 }
+
+.date-time-style{
+  font-size: 11px;
+}
 </style>
 
 <script type="text/javascript">
@@ -127,8 +131,9 @@
   }
 </script>
 
-<div class="col-md-4 col-sm-5">
-	<div class="well left-pannel-fixed" > 
+<div class="col-md-4 col-sm-3">
+	<div class="left-pannel-fixed " > 
+    <div class="well">
         <form  action="{{ =URL('post_status') }}" method="post" 
         		class="form-horizontal" role="form">
             <h4>What's New</h4>
@@ -142,17 +147,28 @@
               	<ul class="list-inline" ><li>
               	Share with {{ = form.custom.widget.shared_with }}</li></ul>
         </form>
+      </div>
+      <div class="well" > 
+          <form  action="{{ =URL('post_status') }}" method="post" 
+              class="form-horizontal" role="form">
+                <h4>My Gallery</h4>
+
+                  <span class="glyphicon glyphicon-plus" aria-hidden="true" onClick="alert('aa')"></span>
+                <div class="form-group" style="padding:14px;">
+                </div>
+        </form>
+      </div>
     </div>
 </div>
 
-<div class="col-md-5 col-sm-5">
+<div class="col-md-5 col-sm-6 ">
 	{{ for post in post_cleaned:}}
       <div class="panel panel-default">
            <div class="panel-heading">
               <div class="post-owner-Image">
                 <img src="{{ =URL('download', args=profile_picture_of_post_owner[post.modified_by]) }}">
               </div>
-              <a href="#" class="pull-right">{{=post.created_on.strftime("%d %b %Y, %I:%m %p")}}</a> 
+              <a href="#" class="pull-right date-time-style">{{=post.created_on.strftime("%d %b %Y, %I:%m %p")}}</a> 
               <h4>{{=post.created_by}}</h4>
            </div>
         <div class="panel-body">
@@ -222,4 +238,9 @@
             </div>
         </div>
   {{ pass }}
+</div>
+
+
+<div class="col-md-3 col-sm-3 ">
+  
 </div>
