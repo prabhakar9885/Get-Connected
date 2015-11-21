@@ -269,5 +269,19 @@
 
 
 <div class="col-md-3 col-sm-3 ">
-  
+  <div class="left-pannel-fixed " style="width: 24%;"> 
+      <div class="well"  > 
+          <!-- container for listing the gallaries -->
+          <form  action="{{ =URL('post_status') }}" method="post" 
+              class="form-horizontal" role="form">
+                <h4>
+                <span class="glyphicon glyphicon-flag" style="color:#337ab7"></span>
+                Notifications</h4>
+
+                {{ =LOAD('user', 'get_notifications_list', ajax=True, target="notification-pannel" ) }} 
+                
+                <div id="notification-pannel"></div>
+        </form>
+      </div>
+  </div>
 </div>

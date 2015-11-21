@@ -209,6 +209,20 @@ def post_comment_like():
 	redirect("home")
 
 
+
+def get_notifications_list():
+	l=[]
+	
+	l.append( ( "Add", "Prabhakar has sent you a friend request.", "link" ) )
+	l.append( ( "Post", "Satyam has shared a post with you", "link" ) )
+	l.append( ( "Like", "Satyam has liked a post of you.", "link" ) )
+	l.append( ( "Pics", "Prabhakar has create a new album: Birthday Pics", "link" ) )
+
+	notification_list = l;
+
+	return locals();
+
+
 @auth.requires_login()
 def download():
     return response.download(request, db, attachment=False);

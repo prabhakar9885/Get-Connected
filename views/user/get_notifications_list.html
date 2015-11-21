@@ -1,0 +1,22 @@
+<table class="table table-hover">
+{{ for notification in notification_list:}}
+	<tr>
+		<td>
+			{{ (type, data, link) = notification }}
+			{{ if type=="Add": }}
+				<span class="glyphicon glyphicon-plus"></span>
+			{{ elif type == "Pics": }}
+				<span class="glyphicon glyphicon-film"></span>
+			{{ elif type == "Post": }}
+				<span class="glyphicon glyphicon-cloud-upload"></span>
+			{{ elif type == "Like": }}
+				<span class="glyphicon glyphicon-thumbs-up"></span>
+			{{ else: }}
+				<span class="glyphicon glyphicon-chevron-right"></span>
+			{{pass}}
+			<span> {{=data}} </span>
+			<span> <a>{{=link}}</a> </span>
+		</td>
+	</tr>
+{{ pass }}
+</table>
