@@ -1,0 +1,44 @@
+<style type="text/css">
+  .gallery-title-button
+  {
+    background-color: transparent;
+    border-color: transparent;
+    color: green;
+  }
+  input.gallery-title-button
+  {
+    white-space: nowrap; 
+    width: 100px; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
+  }
+</style>
+
+
+{{ if len(gallery_rows) == 0:}}
+                      <i>No gallery has been created. <br/>
+                        Why don't you create a galery right away.</i>
+                    {{else:}}
+                    <table class="table">
+                      {{ for row in gallery_rows: }}
+                      <tr>
+                        <td> 
+                          <input type="hidden" value="{{=row.id}}" name="row{{=row.id}}">
+                          <input type="button" class="gallery-title-button"
+                              onClick="ajax( '{{=URL("user","list_gallery_contents")}}/{{=row.id}}', [], 
+                                      'middle-pannel' )" 
+                              value="{{ = row.gallery_name }}"/>
+                        <!--   <a href="{{= URL( 'edit_gallery', args=row.id ) }}">  -->
+                        </td>
+                        <td>
+                            {{ if gallery_size[row.id] != 0: }}
+                              {{ = gallery_size[row.id] }} pics
+                            {{ else: }}
+                              -
+                            {{ pass }}
+                        </td>
+                        <td> {{ = row.description }}</td> 
+                      </tr>
+                      {{ pass }}
+                    </table>
+                    {{pass}}

@@ -1,0 +1,65 @@
+<style type="text/css">
+  a
+  {
+    text-decoration-line: unset;
+  }
+  a:hover
+  {
+    color: orange;
+    text-decoration-line: unset;
+  }
+  .hidden, #fancybox-thumbs  img {
+    display: none;
+  }
+</style>
+
+
+<p> 
+  <h1>{{=gallery_name}}
+    {{if len(pics)>0:}}
+      <a style="font-size:14px;" href="{{=URL('gallery', 'edit_gallery', args=gallery_id )}}">
+        Add photo
+      </a> 
+    {{pass}}
+  </h1>
+</p>
+
+{{if len(pics)==0:}}
+  <div>
+  <div style="float:left;">
+    <i>The gallery seems empty....</i><br>
+    Why don't you <a href="{{=URL('gallery', 'edit_gallery', args=gallery_id )}}">add some photo</a> to it?
+  </div>
+  <div style="float:right;">
+    <img style="width:30%; height:30%;" src="{{=URL('static','images/empty.png')}}"/>
+  </div>
+
+{{else:}}
+<br>
+<div class="main_pannel">
+
+      {{ i=1 }}
+      {{ for pic in pics:}}
+
+          <div class="col">
+            <div class="col-xs-12 col-md-5">
+              <div class="thumbnail">
+                <a href="{{=URL('download',args=pic.pic_upload)}}" target="_new">
+                    <img src="{{=URL('getconnected', 'user', 'download',args=pic.pic_upload)}}" alt="...">
+                </a>
+                <div class="caption" style="color: grey">
+                  <p>
+                    <a  name="delete_pic"
+                        onClick = "$(this).parent().parent().parent().parent().parent().remove();
+                        ajax( '{{=URL("user","delete_pic")}}/{{=gallery_id}}/{{=pic.id}}', [], 'main_pannel' )">
+                      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                  </p>
+                  <p> {{=pic.description}} </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+      {{pass}}
+</div>
+{{pass}}

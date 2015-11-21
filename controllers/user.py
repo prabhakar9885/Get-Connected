@@ -1,6 +1,21 @@
 # -*- coding: utf-8 -*-
 # 	Contains the code for displaying the user-wall
 
+def get_gallary_rows():
+	loggedin_User_id = auth.user.id;
+	rows = db( db.tbl_gallery.created_by==loggedin_User_id ).select( orderby=db.tbl_gallery.gallery_name )
+	gallery_size={};
+	for row in rows:
+		gallery_size[row.id] = len(db(db.tbl_pictures.gallery_name==row.id).select())
+	return (rows, gallery_size);
+
+
+def list_galleries():
+	print "list_galleries"
+	gallery_rows, gallery_size = get_gallary_rows();
+
+	return locals();
+
 
 @auth.requires_login()
 def home():
@@ -59,7 +74,85 @@ def home():
 
 		i = i+1;
 
+	gallary_rows, gallery_size  = get_gallary_rows();
 	return locals();
+
+
+@auth.requires_login()
+def new_gallery():
+	return locals();
+
+
+@auth.requires_login()
+def view_gallery( gallery_id ):
+	gallery_name = db.tbl_gallery[gallery_id].gallery_name;
+	loggedin_user = db( db.auth_user.id== auth.user.id ).select() [0];
+
+	pics = db(db.tbl_pictures.created_by==loggedin_user and 
+				db.tbl_pictures.gallery_name==gallery_id ).select();
+	return pics;
+
+
+@auth.requires_login()
+def new_gallery_creater():
+	session.flash = request.vars;
+	gallery_id = db.tbl_gallery.insert( gallery_name=request.vars.gallery_name,
+										description=request.vars.description );
+	session.flash="done "+str(id);
+
+	pics = view_gallery( gallery_id )
+	script_js  = "jQuery('#%s').get(0).reload();" % ("list-galleris")
+	script_js += "jQuery('#%s').get(0).reload();" % ("list-galleris")
+	response.js =  script_js
+	return locals();
+
+
+@auth.requires_login()
+def edit_gallery():
+	loggedin_user = db( db.auth_user.id== auth.user.id ).select() [0];
+	gallery_id = request.args(0);
+	gallery_name = db.tbl_gallery[gallery_id].gallery_name;
+
+	db.tbl_pictures.gallery_name.default = gallery_id;
+	db.tbl_pictures.gallery_name.writable = False;
+
+	img_form = SQLFORM(db.tbl_pictures).process();
+
+	if img_form.accepts(request.vars, formname="img_form"):
+		session.flash = "Added to "+gallery_name+" successfully."
+		
+	return locals();
+
+
+
+
+@auth.requires_login()
+def list_gallery_contents():
+	print "list_gallery_contents"
+	gallery_id = request.args(0);
+	print gallery_id
+	gallery_name = db(db.tbl_gallery.id==gallery_id).select()[0].gallery_name;
+	loggedin_user = db( db.auth_user.id== auth.user.id ).select() [0];
+	
+	print URL('views/user', 'list_gallery_contents.html')
+
+	pics = db(db.tbl_pictures.created_by==loggedin_user and 
+				db.tbl_pictures.gallery_name==gallery_id ).select();
+
+	return locals();
+
+
+def delete_pic():
+	print "Delete Pic"
+	gallery_id = int(request.args(0));
+	print gallery_id
+	pic_id = int(request.args(1));
+	print pic_id
+	db( (db.tbl_pictures.id==pic_id) & (db.tbl_pictures.gallery_name==gallery_id) ).delete();
+	session.flash = "Pic Deleted" 
+	response.js = "jQuery('#%s').get(0).reload();" % ("list-galleris")
+
+
 
 def post_status():
 	loggedin_User_id = auth.user.id;
@@ -72,7 +165,6 @@ def post_status():
 
 
 def post_comment_like():
-
 	session.flash = "as "+str(request.vars);
 
 	if request.vars.like_btn:
@@ -101,4 +193,4 @@ def post_comment_like():
 
 @auth.requires_login()
 def download():
-    return response.download(request, db);
+    return response.download(request, db, attachment=False);

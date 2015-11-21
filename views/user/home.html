@@ -104,6 +104,15 @@
 .date-time-style{
   font-size: 11px;
 }
+
+#list-galleris{
+  height: 130px;
+  overflow-y: auto;
+}
+
+.glyphicon{
+  cursor: pointer;
+}
 </style>
 
 <script type="text/javascript">
@@ -131,9 +140,11 @@
   }
 </script>
 
+<!--              Left pannel           -->
 <div class="col-md-4 col-sm-3">
 	<div class="left-pannel-fixed " > 
     <div class="well">
+        <!-- container for updating status -->
         <form  action="{{ =URL('post_status') }}" method="post" 
         		class="form-horizontal" role="form">
             <h4>What's New</h4>
@@ -149,19 +160,24 @@
         </form>
       </div>
       <div class="well" > 
+          <!-- container for listing the gallaries -->
           <form  action="{{ =URL('post_status') }}" method="post" 
               class="form-horizontal" role="form">
                 <h4>My Gallery</h4>
+                <a  name="create_new_gallery"
+                    onclick="ajax( '{{=URL('user','new_gallery')}}', ['create_new_gallery'], 'middle-pannel' )">
+                  <span class="glyphicon glyphicon-plus" aria-hidden="true">
+                  </span>
+                </a>
 
-                  <span class="glyphicon glyphicon-plus" aria-hidden="true" onClick="alert('aa')"></span>
-                <div class="form-group" style="padding:14px;">
-                </div>
+                {{ =LOAD('user', 'list_galleries.html', ajax=True, target="list-galleris" ) }}
         </form>
       </div>
     </div>
 </div>
 
-<div class="col-md-5 col-sm-6 ">
+
+<div class="col-md-5 col-sm-6 " id="middle-pannel">
 	{{ for post in post_cleaned:}}
       <div class="panel panel-default">
            <div class="panel-heading">

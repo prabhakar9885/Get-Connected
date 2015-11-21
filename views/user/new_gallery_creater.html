@@ -1,0 +1,21 @@
+
+Gallery contents
+
+<div class="main_pannel">
+
+      {{ i=1 }}
+      {{ for pic in pics:}}
+        <a class="fancybox-thumbs" data-fancybox-group="thumb{{=i}}" 
+            href="{{=URL('download',args=pic.pic_upload)}}">
+              <img src="{{=URL('download',args=pic.thumbnail)}}" alt="" />
+        </a>
+
+        <a class="fancybox-thumbs hidden" data-fancybox-group="thumb{{=i}}" 
+            href="{{=URL('download',args=pic.pic_upload)}}">
+              <img src="{{=URL('download',args=pic.thumbnail)}}" alt="" />
+        </a>
+          {{ i = i+1 }}
+      {{pass}}
+</div>
+
+<div id="sd"></div>

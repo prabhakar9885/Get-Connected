@@ -1,0 +1,11 @@
+
+<h2>
+	New Gallery
+</h2>
+<input type="text" placeholder="Gallery Name" name="gallery_name">
+<input type="text" placeholder="Gallery is about..." name="description">
+<input type="button" value="Create" onClick="ajax( '{{=URL('user','new_gallery_creater')}}', ['gallery_name', 'description'], 'gallery-contents' )"/>
+
+<div id="upload-pannel">
+
+</div>

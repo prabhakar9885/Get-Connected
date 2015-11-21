@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-db.define_table( "tbl_gallery", Field("gallery_name", "string" ),
+db.define_table( "tbl_gallery", Field("gallery_name", "string", requires=IS_NOT_EMPTY() ),
 								Field("description", "text"),
 								auth.signature,
 								format = '%(gallery_name)s'
@@ -11,9 +11,9 @@ db.tbl_gallery.gallery_name.requires = [ IS_NOT_EMPTY(), IS_NOT_IN_DB(db, db.tbl
 
 tbl_pic = db.define_table( "tbl_pictures",	Field("gallery_name", 'reference tbl_gallery' ),
     							#Field('pic_blob', 'blob'),
-								Field('pic_upload', 'upload'),#, uploadfield='pic_blob'),
+								Field('pic_upload', 'upload', requires=IS_NOT_EMPTY()),#, uploadfield='pic_blob'),
 								Field("thumbnail", "upload"),
-								Field('description', 'text'),
+								Field('description', 'string'),
 								auth.signature
 				);
 
