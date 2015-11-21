@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # 	Contains the code for displaying the user-wall
 
+@auth.requires_login()
 def get_gallary_rows():
 	loggedin_User_id = auth.user.id;
 	rows = db( db.tbl_gallery.created_by==loggedin_User_id ).select( orderby=db.tbl_gallery.gallery_name )
@@ -9,7 +10,7 @@ def get_gallary_rows():
 		gallery_size[row.id] = len(db(db.tbl_pictures.gallery_name==row.id).select())
 	return (rows, gallery_size);
 
-
+@auth.requires_login()
 def list_galleries():
 	print "list_galleries"
 	gallery_rows, gallery_size = get_gallary_rows();
@@ -35,6 +36,7 @@ def home():
 	count_of_likes_for_post = {}
 	id_of_posts_liked_by_me = []
 	profile_picture_of_post_owner = {}
+	first_two_likes_by = {}
 
 	query_the_liked_posts = (db.tbl_likes.post_id != None) & \
 								 (db.tbl_likes.created_by == auth.user.id);
@@ -65,6 +67,21 @@ def home():
 
 		# Get count of the likes for "post"
 		count_of_likes_for_post[post.id] = db( db.tbl_likes.post_id == post.id ).count()
+
+		print count_of_likes_for_post
+		if count_of_likes_for_post[post.id] > 0:
+			first_two_likes_by[post.id] = [];
+			temp = db( db.tbl_likes.post_id == post.id ).select(orderby=db.tbl_likes.created_on)
+			if len(temp)>0 :
+				x = db( db.auth_user.id == temp[0].created_by ).select()[0]
+				x = x.first_name +" " + x.last_name;
+				print x
+				first_two_likes_by[post.id].append( x );
+			if len(temp)>1 :
+				x = db( db.auth_user.id == temp[1].created_by ).select()[0]
+				x = x.first_name +" " + x.last_name;
+				print x
+				first_two_likes_by[post.id].append( x );
 
 		# Get profile pic of the "post" creater.
 		if post.modified_by not in profile_picture_of_post_owner:
@@ -141,7 +158,7 @@ def list_gallery_contents():
 
 	return locals();
 
-
+@auth.requires_login()
 def delete_pic():
 	print "Delete Pic"
 	gallery_id = int(request.args(0));
@@ -153,7 +170,7 @@ def delete_pic():
 	response.js = "jQuery('#%s').get(0).reload();" % ("list-galleris")
 
 
-
+@auth.requires_login()
 def post_status():
 	loggedin_User_id = auth.user.id;
 	new_status_from_server = request.vars.new_status
@@ -164,6 +181,7 @@ def post_status():
 	# return response.render('user/home.html', locals() );
 
 
+@auth.requires_login()
 def post_comment_like():
 	session.flash = "as "+str(request.vars);
 
