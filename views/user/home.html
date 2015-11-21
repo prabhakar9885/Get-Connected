@@ -190,25 +190,31 @@
         <div class="panel-body">
               <div class="clearfix"></div>
               {{=post.data_content}}
-              <hr>
               {{ if post.shared_with != "" : }}
+                  <hr>
+              {{ pass }}
+              
                 <ul class="list-unstyled">
                   <li>
-                    <span style="color: darkgrey;"> with</span> <a href="">{{=post.shared_with}}</a>
+                    {{ if post.shared_with != "" : }}
+                      <span style="color: darkgrey;"> with</span> <a href="">{{=post.shared_with}}</a>
+                    {{ pass }}
+                    {{ if post.shared_with != "" and post.id in count_of_likes_for_post and count_of_likes_for_post[post.id] > 0: }}
+                      <span style="color: darkgrey; margin: 0px 8px;"> | </span>
+                    {{ pass }}
                     {{ if post.id in count_of_likes_for_post and count_of_likes_for_post[post.id] > 0: }}
-                        <span style="color: darkgrey; margin: 0px 8px;"> | </span>
-                        <span style="color: darkgrey;">
+                        <span style="color: darkgrey;"
+                                title="{{=first_two_likes_by[post.id]}}">
                           {{ if count_of_likes_for_post[post.id] == 1: }}
                             1 person liked it.
                           {{ else: }}
                             {{ =count_of_likes_for_post[post.id] }} people liked it
                           {{ pass }}
                         </span>
-                    {{ pass }}
                   </li>
                 </ul>
                 <hr/>
-                {{ pass }}
+              {{ pass }}
                           
               <div class="detailBox">
                   <div class="actionBox">
@@ -230,20 +236,25 @@
                       </ul>
                       <form action="{{ = URL('post_comment_like') }}" method="post"
                             class="form-inline" role="form" name="comment_like_form" >
-                          <div class="input-group">
+                          <div class="input-group" style="width:100%">
                             <input type="hidden" name="post_id" value="{{=post.id}}">
                             <input name="new_comment" type="textbox" placeholder="Enter your comment" 
                                       class="form-control">
                             <span class="input-group-btn">
                               <button class="btn btn-default" type="submit" name="comment_btn" 
-                                        onClick="return isCommentValid(this);" value="Commented">
-                                        Comment</button>
+                                  onClick="return isCommentValid(this);" value="Commented">
+                                      <span class="glyphicon glyphicon-chevron-right"></span>
+                              </button>
                               {{ if post.id in id_of_posts_liked_by_me: }}
                                   <button class="btn btn-default" name="like_btn" value="liked" 
-                                          type="submit">Liked</button>
+                                          type="submit">
+                                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                                  </button>
                               {{ else: }}
                                   <button class="btn btn-default" name="like_btn" value="liked" 
-                                          type="submit">Like</button>
+                                          type="submit">
+                                        <span class="glyphicon glyphicon-hand-up"></span>
+                                  </button>
                               {{ pass }}
                             </span>
                           </div>
