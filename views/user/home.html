@@ -163,14 +163,18 @@
           <!-- container for listing the gallaries -->
           <form  action="{{ =URL('post_status') }}" method="post" 
               class="form-horizontal" role="form">
-                <h4>My Gallery</h4>
+                <h4>Gallery</h4>
+                {{ if impersonation == "OFF": }}
                 <a  name="create_new_gallery"
                     onclick="ajax( '{{=URL('user','new_gallery')}}', ['create_new_gallery'], 'middle-pannel' )">
                   <span class="glyphicon glyphicon-plus" aria-hidden="true">
                   </span>
                 </a>
+                {{ pass }}
 
-                {{ =LOAD('user', 'list_galleries.html', ajax=True, target="list-galleris" ) }}
+                {{ =LOAD('user', 'list_galleries.html', \
+                        args=[auth.user.id if request.args(0)==None else request.args(0) ], \
+                        ajax=True, target="list-galleris" ) }}
         </form>
       </div>
     </div>

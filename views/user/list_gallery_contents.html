@@ -16,7 +16,7 @@
 
 <p> 
   <h1>{{=gallery_name}}
-    {{if len(pics)>0:}}
+    {{if len(pics)>0 and impersonation=="OFF":}}
       <a style="font-size:14px;" href="{{=URL('gallery', 'edit_gallery', args=gallery_id )}}">
         Add photo
       </a> 
@@ -28,7 +28,9 @@
   <div>
   <div style="float:left;">
     <i>The gallery seems empty....</i><br>
-    Why don't you <a href="{{=URL('gallery', 'edit_gallery', args=gallery_id )}}">add some photo</a> to it?
+    {{ if impersonation=="OFF": }}
+      Why don't you <a href="{{=URL('gallery', 'edit_gallery', args=gallery_id )}}">add some photo</a> to it?
+    {{pass}}
   </div>
   <div style="float:right;">
     <img style="width:30%; height:30%;" src="{{=URL('static','images/empty.png')}}"/>
@@ -48,12 +50,14 @@
                     <img src="{{=URL('getconnected', 'user', 'download',args=pic.pic_upload)}}" alt="...">
                 </a>
                 <div class="caption" style="color: grey">
+                {{ if impersonation=="OFF": }}
                   <p>
                     <a  name="delete_pic"
                         onClick = "$(this).parent().parent().parent().parent().parent().remove();
                         ajax( '{{=URL("user","delete_pic")}}/{{=gallery_id}}/{{=pic.id}}', [], 'main_pannel' )">
                       <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                   </p>
+                {{ pass }}
                   <p> {{=pic.description}} </p>
                 </div>
               </div>

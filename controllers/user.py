@@ -3,7 +3,14 @@
 
 @auth.requires_login()
 def get_gallary_rows():
-	loggedin_User_id = auth.user.id;
+	
+	if len(request.args) > 0 and str(auth.user.id)!=request.args(0) :
+		loggedin_User_id = request.args(0);
+		impersonation = "ON"
+	else:
+		loggedin_User_id = auth.user.id;	
+		impersonation = "OFF"
+
 	rows = db( db.tbl_gallery.created_by==loggedin_User_id ).select( orderby=db.tbl_gallery.gallery_name )
 	gallery_size={};
 	for row in rows:
@@ -13,6 +20,16 @@ def get_gallary_rows():
 @auth.requires_login()
 def list_galleries():
 	print "list_galleries"
+	print request.args
+	print request.args(0)
+
+	if len(request.args) > 0 and str(auth.user.id)!=request.args(0) :
+		loggedin_User_id = request.args(0);
+		impersonation = "ON"
+	else:
+		loggedin_User_id = auth.user.id;	
+		impersonation = "OFF"
+
 	gallery_rows, gallery_size = get_gallary_rows();
 
 	return locals();
@@ -21,10 +38,12 @@ def list_galleries():
 @auth.requires_login()
 def home():
 
-	if len(request.args) > 0 :
+	if len(request.args) > 0 and str(auth.user.id)!=request.args(0):
 		loggedin_User_id = request.args(0);
+		impersonation = "ON"
 	else:
 		loggedin_User_id = auth.user.id;
+		impersonation = "OFF"
 	new_status_from_server = request.vars.new_status
 
 	db.tbl_posts.data_content.readable = False
@@ -153,13 +172,20 @@ def edit_gallery():
 
 @auth.requires_login()
 def list_gallery_contents():
-	print "list_gallery_contents"
+	print "list_gallery_contents--"
+
+	print request.args(0);
+
 	gallery_id = request.args(0);
 	print gallery_id
 	gallery_name = db(db.tbl_gallery.id==gallery_id).select()[0].gallery_name;
+	gallery_created_by = db(db.tbl_gallery.id==gallery_id).select()[0].created_by;
 	loggedin_user = db( db.auth_user.id== auth.user.id ).select() [0];
 	
-	print URL('views/user', 'list_gallery_contents.html')
+	if str(auth.user.id)!=str(gallery_created_by) :
+		impersonation = "ON"
+	else:
+		impersonation = "OFF"
 
 	pics = db(db.tbl_pictures.created_by==loggedin_user and 
 				db.tbl_pictures.gallery_name==gallery_id ).select();
