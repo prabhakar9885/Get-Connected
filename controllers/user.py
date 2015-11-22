@@ -211,8 +211,14 @@ def post_status():
 	db.tbl_posts.insert(shared_with=request.vars.shared_with, data_content=request.vars.new_status)
 	db.commit();
 	session.flash = "Posted Successfully."
-	redirect("home")
-	# return response.render('user/home.html', locals() );
+
+	if len(request.args) == 0:
+		print "-------------1"
+		redirect("home")
+	else:
+		print "-------------2"
+		redirect(URL("user","home",args=[request.args(0)]));
+
 
 
 @auth.requires_login()
@@ -240,7 +246,14 @@ def post_comment_like():
 		db.commit();
 		session.flash = "Commented Successfully."
 
-	redirect("home")
+	
+	if len(request.args) == 0:
+		print "-------------1"
+		redirect("home")
+	else:
+		print "-------------2"
+		print request.args(0)
+		redirect(URL("user","home",args=[request.args(0)]));
 
 
 

@@ -247,7 +247,7 @@
                           </li>
                           {{ pass }}
                       </ul>
-                      <form action="{{ = URL('post_comment_like') }}" method="post"
+                      <form action="{{ = URL('post_comment_like') }}/{{=loggedin_User_id}}" method="post"
                             class="form-inline" role="form" name="comment_like_form" >
                           <div class="input-group" style="width:100%">
                             <input type="hidden" name="post_id" value="{{=post.id}}">
@@ -261,12 +261,12 @@
                               {{ if post.id in id_of_posts_liked_by_me: }}
                                   <button class="btn btn-default" name="like_btn" value="liked" 
                                           type="submit">
-                                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                                        <span style="color:#337AB7" class="glyphicon glyphicon-thumbs-up"></span>
                                   </button>
                               {{ else: }}
                                   <button class="btn btn-default" name="like_btn" value="liked" 
                                           type="submit">
-                                        <span class="glyphicon glyphicon-hand-up"></span>
+                                        <span class="glyphicon glyphicon-thumbs-up"></span>
                                   </button>
                               {{ pass }}
                             </span>
