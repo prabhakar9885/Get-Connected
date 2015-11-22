@@ -1,0 +1,13 @@
+{{for each_profile_info in profile_info:}}
+Name : {{=each_profile_info.first_name}} {{=each_profile_info.last_name}}
+
+<br/>
+Email : {{=each_profile_info.email}}
+<br/>
+Gender : {{=each_profile_info.gender}}
+<br/>
+Profile  Picture: 
+<div style="height:130px;width:130px">
+<img src="{{=URL('download',args=each_profile_info.profile_picture)}}" style="height:100%;width:100%" />
+</div>
+{{pass}}

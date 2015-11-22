@@ -1,0 +1,88 @@
+{{extend 'layout.html'}}
+<!--<script>
+        function chng_src(x)
+        {
+           
+           document.getElementById("frame").frameborder=5;
+            document.getElementById("frame").src='{{=URL("default","show_profile")}}'+ '?id='+ x;
+        }
+</script>
+{{if not rows:}}
+<h2>
+    0 result found
+</h2>
+{{pass}}
+<div style="height:100%;width:100%">
+<div style="float:left;width:40%;height:100%">
+       <table class="table table-hover">
+       {{for each_row in rows:}}
+            <tr >
+            <td>
+               <a href="#" onclick="chng_src({{=each_row.id}})">    {{=each_row.first_name}} {{=each_row.last_name}}</a>
+            </td>
+            <td>
+                <a href="#" >Add Friend</a>
+            </td>
+            </tr>
+        {{pass}}
+    </table>
+</div>
+
+<div style="float:right;width:50%;height:100%">
+      <iframe id="frame" src="{{=URL('show_profile',vars={})}}" style="width:100%" onload="this.style.height=this.contentDocument.body.scrollHeight +'px'" frameborder="0">
+      </iframe>
+</div>
+</div>
+-->
+<script>
+        function chng_src(x)
+        {
+            document.getElementById("frame").frameborder=5;
+            document.getElementById("frame").src='{{=URL("default","show_profile")}}'+ '?id='+ x;
+        }
+        function chng(x)
+        {
+            if(x=="n")
+            document.getElementById("button").value="Friend Request Sent";
+        }
+</script>
+{{if not rows:}}
+<h2>
+    0 result found
+</h2>
+{{pass}}
+<div style="height:100%;width:100%">
+<div style="float:left;width:40%;height:100%">
+       <table class="table table-hover">
+           {{i=0}}
+       {{for each_row in rows:}}
+            <tr >
+            <td>
+               <a href="#" onclick="chng_src({{=each_row.id}})">    {{=each_row.first_name}} {{=each_row.last_name}}</a>
+            </td>
+            <td>
+                <!--<form action="{{=URL('default','friend_request')}}?friend_id={{=each_row.id}}&">
+                <a href="#" ><input type="submit" value="Add Friend"></input></a>
+                 </form>-->
+                {{if friend_list[i]=="n":}}
+                <form action="{{=URL('default','friend_request')}}?frnd_id={{=each_row.id}}&login_usr_id={{=logged_usr_id}}&stats=p&first={{=a}}&last={{=b}}" method="post">
+                <a href="#" ><input type="submit" value="Add Friend"></input></a>
+                </form>
+                {{elif friend_list[i]=="p" or friend_list[i]=="i" or friend_list[i]=="v":}}
+                <button type="button">Friend Request Sent</button> 
+                {{else:}}
+                <button type="button">Friends</button>
+                {{pass}}
+            </td>
+            </tr>
+           {{i=i+1}}
+        {{pass}}
+    </table>
+</div>
+
+
+<div style="float:right;width:50%;height:100%">
+      <iframe id="frame" src="{{=URL('show_profile',vars={})}}" style="width:100%" onload="this.style.height=this.contentDocument.body.scrollHeight +'px'" frameborder="0">
+      </iframe>
+</div>
+</div>

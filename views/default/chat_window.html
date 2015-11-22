@@ -1,0 +1,71 @@
+{{extend 'layout.html'}}
+<meta http-equiv="refresh" />
+ <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+
+<div class="message-wrap col-lg-8 col-sm-3">
+            <div class="msg-wrap">
+
+                <style type="text/css">
+                    .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+                          background-color: aliceblue;
+                        }
+                </style>
+
+                <table class="table table-hover">
+                    {{for row in prevchat:}}
+                    {{if db.auth_user(auth.user.id).first_name==row.created_by.first_name and db.auth_user(auth.user.id).last_name==row.created_by.last_name:}}
+                    <tr>
+                        <td>
+                            <div class="media msg">
+                                <div class="media-body" >
+                                    
+                                    <h5 class="media-heading" style="text-align:left"><u>{{=row.created_by.first_name}} {{=row.created_by.last_name}}</u></h5>
+
+                                    <small class="col-lg-10" style="text-align:left">{{=row.msg_content}}</small>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {{else:}}
+                    <tr>
+                        <td>
+                            <div class="media msg">
+                                <div class="media-body" >
+                                    
+                                    <h5 class="media-heading" style="text-align:right"><u>{{=row.created_by.first_name}} {{=row.created_by.last_name}}</u></h5>
+                                    <div class="media-heading" style="text-align:right">{{=row.msg_content}}</div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {{pass}}
+                    {{pass}}
+                </table>
+                <div class="send-wrap ">
+
+                <textarea class="form-control send-message" rows="3" 
+                            name="user_message" id="user_message"
+                            placeholder="Write a reply..."></textarea>
+
+                <input type="hidden" name="to_email" value="{{=to_email}}"/>
+            </div>
+            <div>
+            <script type="text/javascript">
+                function clicked () {
+                    var x='<tr><td><div class="media msg"><div class="media-body"><h5 class="media-heading" style="text-align:left"><u>'
+                        +"{{=from_name}}"
+                        +'</u></h5><small class="col-lg-10" style="text-align:left">'
+                        +$("#user_message").val();
+                        +'</small></div></div></td></tr>';
+                    $("div.msg-wrap .table > tbody").append(x);
+                    ajax( '{{=URL('default','add_message')}}', 
+                            ['user_message', 'to_email'], '' )
+                    $("#user_message").val('')
+                }
+            </script>
+                
+                <input type="submit" value="send" onClick="clicked()"></input>
+             </div>   
+            </div>
+</div>

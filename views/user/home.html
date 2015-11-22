@@ -181,11 +181,16 @@
 	{{ for post in post_cleaned:}}
       <div class="panel panel-default">
            <div class="panel-heading">
-              <div class="post-owner-Image">
-                <img src="{{ =URL('download', args=profile_picture_of_post_owner[post.modified_by]) }}">
-              </div>
+              <a href="{{=URL("user", "home")}}/{{=thePost_is_created_by_userId[post.id]}}">
+                <div class="post-owner-Image">                
+                  <img src="{{ =URL('download', args=profile_picture_of_post_owner[post.modified_by]) }}"
+                    onerror="this.src = '{{=URL('getconnected','static','images')}}/no-image.png';">
+                </div>
+              </a>
               <a href="#" class="pull-right date-time-style">{{=post.created_on.strftime("%d %b %Y, %I:%m %p")}}</a> 
-              <h4>{{=post.created_by}}</h4>
+              <a href="{{=URL("user", "home")}}/{{=thePost_is_created_by_userId[post.id]}}">
+                <h4>{{=post.created_by}}</h4>
+              </a>
            </div>
         <div class="panel-body">
               <div class="clearfix"></div>
@@ -197,7 +202,10 @@
                 <ul class="list-unstyled">
                   <li>
                     {{ if post.shared_with != "" : }}
-                      <span style="color: darkgrey;"> with</span> <a href="">{{=post.shared_with}}</a>
+                      <span style="color: darkgrey;"> with</span> 
+                          <a href="{{=URL("user", "home")}}/{{=shared_thePost_with_userId[post.id]}}">
+                            {{=post.shared_with}}
+                          </a>
                     {{ pass }}
                     {{ if post.shared_with != "" and post.id in count_of_likes_for_post and count_of_likes_for_post[post.id] > 0: }}
                       <span style="color: darkgrey; margin: 0px 8px;"> | </span>
@@ -223,7 +231,8 @@
                           <li>
                               <div class="commenterImage">
                                 <!-- <img src="http://lorempixel.com/50/50/people/6" /> -->
-                                <img src="{{ =URL('download', args=commenter_profile_pic[comment.created_by] ) }}"/>
+                                <img src="{{ =URL('download', args=commenter_profile_pic[comment.created_by] ) }}"
+                                      onerror="this.src = '{{=URL('getconnected','static','images')}}/no-image.png';"/>
                               </div>
                               <div class="commentText">
                                   <p class="">{{=comment.data_content}}</p> 

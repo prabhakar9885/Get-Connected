@@ -20,7 +20,11 @@ def list_galleries():
 
 @auth.requires_login()
 def home():
-	loggedin_User_id = auth.user.id;
+
+	if len(request.args) > 0 :
+		loggedin_User_id = request.args(0);
+	else:
+		loggedin_User_id = auth.user.id;
 	new_status_from_server = request.vars.new_status
 
 	db.tbl_posts.data_content.readable = False
@@ -37,6 +41,8 @@ def home():
 	id_of_posts_liked_by_me = []
 	profile_picture_of_post_owner = {}
 	first_two_likes_by = {}
+	shared_thePost_with_userId={}
+	thePost_is_created_by_userId = {}
 
 	query_the_liked_posts = (db.tbl_likes.post_id != None) & \
 								 (db.tbl_likes.created_by == auth.user.id);
@@ -47,9 +53,11 @@ def home():
 
 	for post in posts:
 		post_cleaned.append(post);
+		thePost_is_created_by_userId[post.id] = post_cleaned[i].created_by;
 		creater = db(post_cleaned[i].created_by ==db.auth_user.id).select()[0];
 		post_cleaned[i].created_by = "%s %s" %(creater.first_name, creater.last_name);
 		try:
+			shared_thePost_with_userId[post.id] = post_cleaned[i].shared_with
 			shared_with = db(post_cleaned[i].shared_with ==db.auth_user.id).select()[0];
 			post_cleaned[i].shared_with = "%s %s" %(shared_with.first_name, shared_with.last_name);
 		except IndexError: # The post is shared with none.
